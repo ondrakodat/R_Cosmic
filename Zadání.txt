@@ -1,0 +1,25 @@
+Semestrální práce – zadání 
+
+Titulní stránka (seznam jmen, ročník, obor, ….) 
+
+Obsah 
+
+Původ dat a vysvětlení, jak se data sbírají, popř. metoda měření. 
+
+a. Popisná statistika – průměry, rozptyly, směrodatné odchylky, šikmosti, špičatosti a maxima, minima. Popř. hodnoty důležité pro analýzu (koncentrační limity….) 
+
+b. grafy (histogram, boxplot, bodový graf) 
+
+5.    Testování hypotéz – vyberete vhodné sloupce, mezi kterými provedete dvouvýběrový t.test, popř. vhodný jeden sloupec, u kterého provedete jednovýběrový t.test vzhledem k „specifické“ hodnotě (např. koncentrační limit) 
+
+6. ANOVA – analýza rozptylu plus vícenásobné porovnávání pro všech „X“ sloupců v datech, která máte k dispozici. 
+
+7. Korelační analýza 
+
+8. Lineární regrese 
+
+9. Nelineární regrese 
+
+10. Vlastní závěr a komentář k výsledkům  
+
+ 
