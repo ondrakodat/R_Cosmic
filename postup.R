@@ -282,3 +282,69 @@ popisna_OrbPay <- data.frame(
 )
 
 round(popisna_OrbPay, 4)
+
+# VYSLEDEK POPISNE STATISTIKY OrbPay
+# n=6659, minimum=0.002 t, maximum=132.025 t, prumer=6.9362 t,
+# median=3.112 t, vyberovy rozptyl=286.3207, vyberova smerodatna odchylka=16.921.
+# Momentalova sikmost=5.9402 a exces spicatosti=36.1923; rozdeleni je silne
+# pravostranně nesymetricke s tezkymi chvosty.
+
+# KROK 8: Welchuv dvouvyberovy t-test - prumerny OrbPay pred a od roku 2000
+orbital_data$Obdobi <- ifelse(orbital_data$Rok < 2000, "1957-1999", "2000-2026")
+table(orbital_data$Obdobi)
+
+# H0: Prumerny kladny OrbPay je v obou obdobich stejny.
+# H1: Prumerny kladny OrbPay se mezi obdobi odlisuje.
+t.test(
+  OrbPay ~ Obdobi,
+  data = orbital_data,
+  alternative = "two.sided",
+  var.equal = FALSE,
+  conf.level = 0.95
+)
+
+# VYSLEDEK WELCHOVA T-TESTU
+# Skupiny: 1957-1999 n=3821, 2000-2026 n=2838.
+# Prumery: 6.037645 t a 8.146028 t; rozdil starsi-minus-novejsi=-2.108383 t.
+# t=-5.0779, df=6281.5, p=3.926e-07; 95% CI rozdilu [-2.922331,-1.294434].
+# Na hladine 0.05 zamitame H0; prumer je vyssi v obdobi 2000-2026.
+# Vysledek se tyka prumeru kladnych OrbPay a je citlivy na vysoke hodnoty.
+
+# KROK 9: Welchova ANOVA podle desetileti a parova porovnani s Holm korekci
+orbital_data$Desetileti <- factor(floor(orbital_data$Rok / 10) * 10)
+table(orbital_data$Desetileti)
+
+# H0: Prumery OrbPay jsou ve vsech desetiletich stejne.
+# H1: Alespon jedno desetileti ma jiny prumer.
+oneway.test(OrbPay ~ Desetileti, data = orbital_data, var.equal = FALSE)
+
+pairwise.t.test(
+  orbital_data$OrbPay,
+  orbital_data$Desetileti,
+  p.adjust.method = "holm",
+  pool.sd = FALSE
+)
+
+# VYSLEDEK WELCHOVY ANOVA A HOLMOVYCH POROVNANI
+# Skupiny podle desetileti: 1950=18, 1960=760, 1970=1108, 1980=1122,
+# 1990=813, 2000=597, 2010=816, 2020=1425.
+# Welch ANOVA: F(7, 338.39)=80.114, p<2.2e-16; H0 o shodnych prumerech zamitame.
+# Po Holmove korekci jsou vyznamne 25 z 28 dvojic. Nevyznamne:
+# 1980-2010 (p=0.12340), 1990-2000 (p=0.32947), 2000-2020 (p=0.15272).
+# Interpretaci omezujeme s ohledem na sikme rozdeleni a n=18 v 50. letech.
+
+# KROK 10: Korelace roku startu a OrbPay
+# Pearsonova korelace meri linearni vztah; Spearmanova poradi-based monotonicitu.
+cor.test(orbital_data$Rok, orbital_data$OrbPay, method = "pearson")
+cor.test(orbital_data$Rok, orbital_data$OrbPay, method = "spearman", exact = FALSE)
+
+# VYSLEDEK KORELACNI ANALYZY
+# Pearson r=0.1094169, 95% CI [0.08562277, 0.13308631], p<2.2e-16:
+# slaba kladna linearni souvislost.
+# Spearman rho=0.2826391, p<2.2e-16: kladna, ale ne silna monotoni souvislost.
+# Velmi male p-hodnoty pri n=6659 neznamenaji velky prakticky efekt.
+
+# KROK 11: Linearni regrese OrbPay podle roku startu
+model_linear <- lm(OrbPay ~ Rok, data = orbital_data)
+summary(model_linear)
+confint(model_linear)
