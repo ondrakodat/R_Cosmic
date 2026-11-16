@@ -348,3 +348,79 @@ cor.test(orbital_data$Rok, orbital_data$OrbPay, method = "spearman", exact = FAL
 model_linear <- lm(OrbPay ~ Rok, data = orbital_data)
 summary(model_linear)
 confint(model_linear)
+
+# VYSLEDEK LINEARNI REGRESE
+# Sklon Rok=0.08942 t/rok (95% CI 0.06990 az 0.10894; p<2.2e-16).
+# R-squared=0.01197; model vysvetluje priblizne 1.2 % variability OrbPay.
+# Residual standard error=16.82 t. Vztah je vyznamny, ale linearni model
+# ma malou vysvetlovaci silu a vysoke reziduum kvuli rozptylu a odlehlym hodnotam.
+
+# KROK 12: Kvadraticky trend - nelinearni prubeh v case
+# Rok centrujeme kolem 2000, aby byly koeficienty citelnejsi.
+orbital_data$Rok_c <- orbital_data$Rok - 2000
+model_quad <- lm(OrbPay ~ Rok_c + I(Rok_c^2), data = orbital_data)
+summary(model_quad)
+
+# Porovnani, zda kvadraticky clen zlepsil linearni model
+anova(model_linear, model_quad)
+
+# VYSLEDEK KVADRATICKE REGRESE
+# Koeficienty: intercept=9.4148304, Rok_c=0.0517339,
+# Rok_c^2=-0.0050393. Kvadraticky model ma R2=0.02191 oproti
+# linearniho R2=0.01197; rezidualni chyba klesla z 16.82 na 16.74 t.
+# Porovnani vnoreneho modelu: F=67.602, p=2.385e-16; zlepseni je
+# statisticky vyznamne, ale celkova vysvetlovaci sila zustava mala.
+
+# KROK 13: Vypocet vrcholu odhadnute kvadraticke krivky
+koef_quad <- coef(model_quad)
+rok_vrchol <- 2000 - koef_quad["Rok_c"] / (2 * koef_quad["I(Rok_c^2)"])
+predikce_vrcholu <- predict(model_quad, newdata = data.frame(Rok_c = rok_vrchol - 2000))
+c(rok_vrchol = rok_vrchol, predikovany_prumerny_OrbPay = predikce_vrcholu)
+
+# VRCHOL KVADRATICKEHO MODELU Z JEHO VYPSANYCH KOEFICIENTU:
+# Rok priblizne 2005.13; predikovany prumerny OrbPay priblizne 9.55 t.
+
+# KROK 14: Kontrola dalsich ciselnych promennych pro popis a ANOVA
+# Nektera pole jsou v CSV textova kvuli pomlckam; prevedeme je na cisla.
+sloupce_kontroly <- c("Apogee", "Perigee", "Inc", "Azimuth", "Range", "OrbMass", "OrbPay")
+cisla_kontrola <- as.data.frame(lapply(orbital_data[sloupce_kontroly], function(z) {
+  z <- trimws(as.character(z))
+  z[z %in% c("", "-")] <- NA
+  suppressWarnings(as.numeric(z))
+}))
+
+audit_cisel <- data.frame(
+  Promenna = names(cisla_kontrola),
+  Platnych = sapply(cisla_kontrola, function(z) sum(!is.na(z))),
+  Chybejicich = sapply(cisla_kontrola, function(z) sum(is.na(z))),
+  Minimum = sapply(cisla_kontrola, function(z) if (all(is.na(z))) NA else min(z, na.rm = TRUE)),
+  Maximum = sapply(cisla_kontrola, function(z) if (all(is.na(z))) NA else max(z, na.rm = TRUE))
+)
+audit_cisel
+summary(cisla_kontrola$Apogee)
+summary(cisla_kontrola$Perigee)
+summary(cisla_kontrola$Inc)
+table(trimws(orbital_data$Apoflag), useNA = "ifany")
+
+# KROK 15: Provzit Apogee a provest ANOVA podle desetileti
+apogee_data <- data.frame(
+  Desetileti = orbital_data$Desetileti,
+  Apogee = cisla_kontrola$Apogee,
+  Apoflag = trimws(orbital_data$Apoflag)
+)
+
+table(apogee_data$Apoflag == "?", !is.na(apogee_data$Apogee))
+
+# Nejasne hodnoty s priznakem ? vynechame, ostatni platne hodnoty ponechame.
+apogee_potvrzene <- subset(apogee_data, !is.na(Apogee) & Apoflag != "?")
+table(apogee_potvrzene$Desetileti)
+summary(apogee_potvrzene$Apogee)
+
+oneway.test(Apogee ~ Desetileti, data = apogee_potvrzene, var.equal = FALSE)
+
+pairwise.t.test(
+  apogee_potvrzene$Apogee,
+  apogee_potvrzene$Desetileti,
+  p.adjust.method = "holm",
+  pool.sd = FALSE
+)
