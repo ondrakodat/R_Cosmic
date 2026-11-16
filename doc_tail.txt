@@ -1,0 +1,18 @@
+-18 Jasně neorbitální kategorie vymezené prvním písmenem LaunchCode obsahují 68 551 záznamů z let 1942 až 2026. Jde o doplňkový souhrn; pokrytí neorbitálních startů v katalogu je méně úplné než u orbitálních.
+-17 Kategorie D (hlubokovesmírné mise, 229), N (near-orbitální lety, 16), X (starty z jiných těles, 11) a Z (záznamy, které nejsou startem, 7) jsou vykázány odděleně. Nejsou započteny do uvedeného součtu neorbitálních startů.
+-16 Postup analýzy
+-15 1. Kontrola a vymezení dat  Ověříme počet řádků, rozsah let, chybějící hodnoty a kódy LaunchCode. Orbitální záznamy oddělíme od neorbitálních a neznámých či ne-startovních záznamů.
+-14 2. Roční počty startů  Spočítáme všechny orbitální pokusy za rok a počty podle organizace. Zobrazíme celkovou časovou osu, vývoj nejaktivnějších organizací a počet startů podle typů raket.
+-13 3. Úspěšnost  Oddělíme úspěšné, neúspěšné, neznámé a částečně úspěšné kódy. U organizací a období uvedeme počty i podíly; částečné úspěchy nebudeme bez vysvětlení slučovat s plným úspěchem.
+-12 4. Hmotnost nákladu  Pro použitelné kladné hodnoty OrbPay spočítáme počet, průměr, medián, rozptyl, směrodatnou odchylku, minimum a maximum. Porovnáme náklady podle typu rakety, organizace a období. Vzhledem k odlehlým hodnotám budeme společně uvádět průměr i medián.
+-11 5. Grafy  Použijeme časovou osu ročních počtů, grafy podle organizací a raket, graf úspěšnosti a histogram či boxplot OrbPay. V grafech zřetelně označíme neúplný poslední rok a malé skupiny.
+-10 6. Testy a modely  Pro náklady porovnáme dvě období dvouvýběrovým Welchovým t-testem a vybrané skupiny raket Welchovou ANOVA s korekcí vícenásobných porovnání. Korelaci a lineární i kvadratický model použijeme k popisu časového vývoje ročních počtů nebo mediánu nákladu; vedle p-hodnot uvedeme velikost efektu a vysvětlenou variabilitu.
+-9 7. Doplňková neorbitální část  Jasně neorbitální kategorie (například suborbitální, testovací a atmosférické starty) shrneme samostatně podle roku, kategorie a případně organizace. Hlubokovesmírné mise, starty z jiných těles a near-orbitální kategorie vykážeme zvlášť. Počty nesloučíme s orbitální časovou řadou; omezené pokrytí výslovně uvedeme.
+-8 Výzkumná otázka a omezení
+-7 Hlavní otázka: Jak se od roku 1957 měnily počty a úspěšnost orbitálních startů, používané rakety a hmotnost vynášených nákladů podle organizací zajišťujících start?
+-6 Katalog je průběžně doplňovaný kompilovaný zdroj, nikoli záznam z jednotného měřicího protokolu. Počty startů podle Agency vyjadřují evidované startovací služby. Hodnoty OrbPay mohou chybět nebo být automaticky odvozené. Poslední rok může být neúplný a neorbitální pokrytí je méně úplné.
+-5 Předběžné hypotézy
+-4 Roční počet orbitálních startů se v čase změnil; lineární a kvadratický model porovnáme jako popis trendu.
+-3 Podíl úspěšných orbitálních startů se liší mezi organizacemi nebo historickými obdobími.
+-2 Typická hmotnost nákladu OrbPay se liší mezi vybranými typy raket.
+-1 Zdroj definic proměnných: GCAT, Launch List Column Explanations, https://www.planet4589.org/space/gcat/web/launch/lcols.html

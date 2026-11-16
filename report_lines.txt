@@ -1,0 +1,98 @@
+0: Dokumentace nové analýzy kosmických startů
+1: Pracovní plán semestrální práce
+2: Cíl práce
+3: Budeme sledovat, jak se od počátku orbitálních letů měnil počet startů, úspěšnost, používané typy raket a hmotnost nákladu vyneseného na oběžnou dráhu. Starty budeme členit podle organizace odpovědné za startovací služby a podle roku.
+4: Hlavní analýza bude zahrnovat orbitální pokusy o start, úspěšné i neúspěšné, od roku 1957 do posledního roku obsaženého v katalogu. Jasně neorbitální kategorie zpracujeme odděleně jako doplňkovou část, protože jejich pokrytí v katalogu je méně úplné a jde o různorodé typy letů. Kódy pro hlubokovesmírné mise, starty z jiných těles a near-orbitální lety ponecháme jako zvláštní kategorie.
+5: Datové soubory a proměnné
+6: Základem je soubor launch_data_original.csv. Jeden řádek představuje jeden evidovaný start nebo pokus o start. Klíčové proměnné jsou Rok a Launch_Date (čas), Agency (organizace zajišťující start), LV_Type a Variant (typ a varianta rakety), LaunchCode (typ a výsledek startu), OrbPay (náklad dopravený na oběžnou dráhu v tunách), Launch_Site, Launch_Pad a Platform (místo či platforma startu).
+7: Hodnoty Agency jsou kódy organizací, které bude třeba převést na čitelné názvy pomocí číselníku GCAT. Agency neznamená nutně vlastníka nákladu. OrbPay budeme analyzovat pouze tam, kde je hodnota použitelná; katalog upozorňuje, že toto pole je odvozené z tabulek nákladů a může obsahovat zvláštní případy.
+8: Ověřený výsledek první kontroly
+9: Načtení souboru v R GUI potvrdilo 76 032 záznamů a 34 sloupců. Proměnná Rok pokrývá období 1942 až 2026.
+10: Podle prvního písmene LaunchCode je v souboru 7 218 orbitálních záznamů (O). V tomto výběru je nejstarší rok 1957 a nejnovější 2026. Hlavní analýza proto začíná rokem 1957.
+11: Četnosti prvního písmene LaunchCode: A 2 675; D 229; H 210; L 12; M 15 584; N 16; O 7 218; R 106; S 49 334; T 175; X 11; Y 455; Z 7.
+12: Předběžné vymezení: kódy O tvoří hlavní orbitální výběr. Ostatní kategorie nebudeme automaticky všechny označovat za neorbitální; hlubokovesmírné (D), near-orbitální (N), starty z jiných těles (X) a záznamy Z vykážeme zvlášť.
+13: Ověřený výsledek druhého kroku
+14: Orbitální záznamy se v tabulce vyskytují v 70 různých letech od 1957 do 2026. Počty v prvních letech jsou: 1957 3, 1958 28, 1959 21, 1960 37 a 1961 49 startů. V posledních letech: 2017 90, 2018 107, 2019 102, 2020 109, 2021 144, 2022 182, 2023 214, 2024 255, 2025 325 a 2026 zatím 266. Rok 2026 je neúplný.
+15: Deset nejčetnějších kódů Agency jsou RVSN 1 486, UNKS 898, SPX 718, CALT 370, AE 299, SAST 278, AFSSD 243, VKSR 197, FKA 183 a GSFC 175. Jde o kódy zajišťujících organizací, nikoli vždy o obchodní společnosti. Například RVSN a UNKS označují sovětské státní či vojenské organizace a SPX označuje SpaceX.
+16: Deset nejčetnějších typů raket jsou Falcon 9 691, Soyuz-U 633, Kosmos 11K65M 446, Voskhod 11A57 299, Molniya 8K78M 259, Soyuz-U-PVB 154, Space Shuttle 137, Kosmos 11K63 126, Tsiklon-3 122 a Proton-K/DM-2 111.
+17: Výsledek je počtem evidovaných orbitálních startů podle roku, organizace a typu rakety. Nejde zatím o počty úspěšných startů ani o hmotnost vyneseného nákladu.
+18: Číselník organizací GCAT: https://planet4589.org/space/gcat/data/tables/orgs.html
+19: Časový graf ročních počtů
+20: V R GUI byl vytvořen čárový graf s body, který zobrazuje počet orbitálních startů v jednotlivých letech 1957 až 2026. Počty v čase celkově rostou, ale mezi jednotlivými roky kolísají. V neúplném roce 2026 je zatím zaznamenáno 266 startů, proto jej nelze přímo porovnávat s úplnými roky; nejvyšší počet z posledních let má rok 2025 s 325 starty.
+21: 
+22: Obrázek 1. Počet orbitálních startů podle roku. Rok 2026 je neúplný.
+23: Graf slouží k přehledu časového vývoje, sám o sobě neprokazuje příčinu změn ani statistickou významnost trendu.
+24: Vývoj startů podle pěti nejčastějších organizací
+25: Graf porovnává roční počty startů pěti nejčastějších kódů Agency. RVSN a UNKS se soustřeďují hlavně do dřívějších desetiletí, zatímco SpaceX výrazně roste v posledních letech. CALT má více startů v novější části období a Arianespace je zastoupena především od 80. let. Jde o jednotlivé kódy organizací; časově navazující organizace nejsou sloučeny do jedné řady.
+26: 
+27: Obrázek 2. Roční počty orbitálních startů pěti nejčastějších kódů Agency, 1957–2026.
+28: Interpretaci omezují změny kódů organizací v čase. Při srovnání nejde automaticky sloučit historické státní a vojenské organizace s jejich nástupci.
+29: Kódy výsledků orbitálních startů
+30: R GUI vypsalo 7 218 orbitálních záznamů podle LaunchCode. Přesný kód OS označuje plný úspěch (6 662 případů), přesný kód OF plné selhání (424 případů). Dalších 115 záznamů má číselný kód částečného úspěchu; číselný suffix udává procentní podíl úspěchu.
+31: Kódy OE (11 případů) a OA (6 případů) označují výbuch na rampě a přerušený start před vzletem. Pro úspěšnost po vzletu je proto vykazujeme zvlášť. Vážený průměr úspěšnosti pro 7 201 vypuštěných orbitálních pokusů je 93,315 %. Pokud bychom OE a OA zahrnuli do jmenovatele jako neúspěšné pokusy, vyšla by úspěšnost 93,096 %.
+32: Výpočet vychází z plných kódů OS a OF a procent z částečných kódů OSxx/OFxx. Samotná četnost všech záznamů O není totéž co počet raket, které skutečně odstartovaly.
+33: Definice stavů LaunchCode: GCAT Launch List Column Explanations, https://www.planet4589.org/space/gcat/web/launch/lcols.html
+34: Vypočtená úspěšnost orbitálních startů
+35: Plné úspěchy OS byly započítány jako 100 %, plná selhání OF jako 0 % a číselné kódy OSxx/OFxx jako uvedené procento. Z 7 218 orbitálních záznamů bylo 7 201 vypuštěných pokusů. Z nich 6 662 mělo plný úspěch, 424 plné selhání a 115 částečně úspěšný kód. Vážená průměrná úspěšnost činí 93,315 %. Výbuchy na rampě (OE, 11 případů) a přerušené starty před vzletem (OA, 6 případů) uvádíme odděleně.
+36: Srovnání je popisné. Organizace působily v odlišných obdobích a s různými nosnými raketami, proto rozdíly v úspěšnosti samy o sobě neukazují příčinu.
+37: Graf vážené úspěšnosti pěti organizací
+38: SpaceX má v tomto výběru nejvyšší váženou úspěšnost (99,1 %), RVSN nejnižší (92,0 %). U ostatních tří organizací se hodnoty pohybují přibližně mezi 96,3 a 96,5 %. Počty hodnocených startů se liší; výsledky jsou popisné a neprokazují příčinu rozdílů.
+39: 
+40: Obrázek 3. Vážená úspěšnost pěti organizací podle kódů Agency.
+41: Hmotnost nákladu dopraveného na oběžnou dráhu
+42: OrbPay jsme popsali u přesně označených plně úspěšných orbitálních startů s kladnou hodnotou. Ze 6 662 startů OS mají tři nulový OrbPay a žádný nemá chybějící údaj; statistiky níže proto vycházejí z 6 659 kladných hodnot v tunách.
+43: Průměr výrazně převyšuje medián a rozdělení má silnou pravostrannou šikmost i těžké chvosty. Několik velmi vysokých nákladů proto výrazně ovlivňuje průměr; při interpretaci budeme uvádět také medián.
+44: Rozdělení hmotnosti nákladu
+45: Histogram obsahuje 6 659 kladných hodnot OrbPay u plně úspěšných orbitálních startů. Většina nákladů leží pod 20 tunami; vpravo je dlouhý řídký ocas s několika hodnotami nad 100 tun. Nejvyšší hodnota je 132,025 tuny. Tvar grafu odpovídá průměru 6,936 tuny, který převyšuje medián 3,112 tuny.
+46: 
+47: Obrázek 4. Histogram hmotnosti nákladu OrbPay v tunách.
+48: Náklad podle typu rakety
+49: Porovnali jsme pět nejčastějších typů raket ve výběru plně úspěšných orbitálních startů s kladným OrbPay. U každého typu uvádíme počet záznamů, průměr, medián a rozsah pozorovaných hmotností nákladu.
+50: Falcon 9 má v tomto výběru nejvyšší medián (15,5 t), následovaný Soyuz-U (6,3 t) a Voskhod 11A57 (5,8555 t). Jde o skutečně zaznamenané náklady v katalogu, nikoli o maximální nosnost raket. Počty záznamů se mezi skupinami liší.
+51: Boxplot ukazuje medián, prostředních 50 % hodnot a odlehlá pozorování pro každý typ rakety. Všechna zobrazená pozorování jsou v rozsahu 0 až 20 tun.
+52: 
+53: Obrázek 5. Rozdělení hmotnosti nákladu OrbPay podle typu rakety.
+54: Test rozdílu průměrného OrbPay mezi obdobími
+55: Welchovým dvouvýběrovým t-testem jsme porovnali kladný OrbPay u přesně označených plně úspěšných orbitálních startů. Starší období zahrnuje roky 1957–1999 a novější období roky 2000–2026.
+56: Výsledek: t = −5,0779, df = 6 281,5, p = 3,926 × 10⁻⁷. Rozdíl průměrů (starší minus novější období) je −2,1084 t; 95% interval spolehlivosti je [−2,9223; −1,2944] t. Na hladině 0,05 zamítáme nulovou hypotézu o shodných průměrech.
+57: Průměrný OrbPay je v novějším období vyšší, ale test se týká pouze kladných hodnot u plně úspěšných startů. Rozdělení je silně pravostranně vychýlené a průměr ovlivňují vysoké hodnoty; výsledek neprokazuje příčinu změny.
+58: Welchova ANOVA podle typu rakety
+59: Welchova jednofaktorová ANOVA porovnala průměrný kladný OrbPay u pěti nejčastějších typů raket. Výsledek je F(4; 948,08) = 14 639, p < 2,2 × 10⁻¹⁶. Nulovou hypotézu o shodných průměrech zamítáme.
+60: Všech deset párových Welchových t-testů zůstalo statisticky významných po Holmovo korekci (u všech p < 2,2 × 10⁻¹⁶). Skupiny mají různé počty i rozptyly a hodnoty OrbPay jsou výrazně vychýlené; proto výsledek popisuje rozdíly v tomto výběru a neprokazuje příčinu.
+61: Korelace roku s ročním počtem orbitálních startů
+62: Pearsonova korelace pro 70 ročních pozorování je r = 0,3365 (95% interval spolehlivosti 0,1103 až 0,5296; p = 0,004392). Výsledek ukazuje kladnou lineární souvislost mezi rokem a ročním počtem startů.
+63: Spearmanova korelace je ρ = 0,0567 (p = 0,6413), takže monotónní souvislost nebyla prokázána. Rozdíl mezi výsledky odpovídá kolísavému vývoji ročních počtů; samotná korelace neprokazuje příčinu. Rok 2026 je neúplný.
+64: Korelace je vypočtena z ročních součtů, nikoli z jednotlivých startů. Každý rok proto tvoří jedno pozorování.
+65: Lineární a kvadratická regrese ročních počtů
+66: Lineární model odhaduje nárůst o 0,8515 orbitálního startu za rok (p = 0,004392). R² = 0,1133 a reziduální směrodatná chyba je 48,84 startu, takže model vysvětluje přibližně 11,3 % variability ročních počtů.
+67: Kvadratický model má R² = 0,1721 (upravené R² = 0,1474) a reziduální směrodatnou chybu 47,55. Přidání kvadratického členu model statisticky zlepšilo: F(1; 67) = 4,7617, p = 0,03261. Koeficient kvadratického členu je kladný (0,03397; p = 0,03261), takže odhadovaná křivka má tvar U.
+68: Kvadratický model zachycuje část poklesu a pozdějšího růstu, ale vysvětluje jen asi 17 % variability. Několik vysokých počtů v posledních letech a neúplný rok 2026 ovlivňují křivku. Model popisuje pozorovaný trend, není spolehlivou předpovědí.
+69: 
+70: Obrázek 6. Roční počty orbitálních startů s lineárním a kvadratickým trendem.
+71: Doplňkový přehled neorbitálních startů
+72: Jasně neorbitální kategorie vymezené prvním písmenem LaunchCode obsahují 68 551 záznamů z let 1942 až 2026. Jde o doplňkový souhrn; pokrytí neorbitálních startů v katalogu je méně úplné než u orbitálních.
+73: Kategorie D (hlubokovesmírné mise, 229), N (near-orbitální lety, 16), X (starty z jiných těles, 11) a Z (záznamy, které nejsou startem, 7) jsou vykázány odděleně. Nejsou započteny do uvedeného součtu neorbitálních startů.
+74: Audit dalších číselných proměnných
+75: Audit jsme provedli ve výběru plně úspěšných orbitálních startů s kladným OrbPay (6 659 záznamů). OrbPay má v tomto výběru 6 659 platných hodnot a 2 073 různých hodnot v rozsahu 0,002 až 132,025 t. Je proto vhodný pro další popisné a srovnávací analýzy.
+76: Apogee je vyplněno u 6 093 záznamů, Perigee a Inc u 1 286. U Apogee je 175 záznamů označeno příznakem Apoflag „?“, takže před analýzou výšky apogea ověříme význam tohoto příznaku a rozložení údajů v čase. Minimum Perigee je −2 345; záporné hodnoty je třeba před interpretací prověřit. Azimuth má jedinou platnou hodnotu (0) a Range nemá žádnou, takže z těchto sloupců nelze v tomto výběru odhadnout variabilitu ani provést srovnávací testy. OrbMass je konstantní nula a rovněž není pro srovnávací analýzu použitelný.
+77: Tabulka 1. Audit číselných proměnných ve výběru úspěšných startů s kladným nákladem.
+78: Pokrytí údajů podle desetiletí
+79: V kontrolním výběru je OrbPay dostupný ve všech 6 659 záznamech. U Apogee jsme vynechali 175 hodnot označených Apoflag „?“. Perigee a Inc mají v tomto výběru shodný počet platných údajů; v 50. letech jsou k dispozici pouze dva, proto je při srovnání desetiletí vynecháme. Počty od 60. let ukazují dostatek údajů pro Welchovu ANOVU, ovšem skupiny zůstávají nerovnoměrné. Rok 2020 zahrnuje neúplné roky 2020–2026.
+80: Tabulka 2. Počet platných hodnot podle desetiletí.
+81: * U Apogee jsou vynechány záznamy s Apoflag „?“.
+82: Postup analýzy
+83: 1. Kontrola a vymezení dat  Ověříme počet řádků, rozsah let, chybějící hodnoty a kódy LaunchCode. Orbitální záznamy oddělíme od neorbitálních a neznámých či ne-startovních záznamů.
+84: 2. Roční počty startů  Spočítáme všechny orbitální pokusy za rok a počty podle organizace. Zobrazíme celkovou časovou osu, vývoj nejaktivnějších organizací a počet startů podle typů raket.
+85: 3. Úspěšnost  Oddělíme úspěšné, neúspěšné, neznámé a částečně úspěšné kódy. U organizací a období uvedeme počty i podíly; částečné úspěchy nebudeme bez vysvětlení slučovat s plným úspěchem.
+86: 4. Hmotnost nákladu  Pro použitelné kladné hodnoty OrbPay spočítáme počet, průměr, medián, rozptyl, směrodatnou odchylku, minimum a maximum. Porovnáme náklady podle typu rakety, organizace a období. Vzhledem k odlehlým hodnotám budeme společně uvádět průměr i medián.
+87: 5. Grafy  Použijeme časovou osu ročních počtů, grafy podle organizací a raket, graf úspěšnosti a histogram či boxplot OrbPay. V grafech zřetelně označíme neúplný poslední rok a malé skupiny.
+88: 6. Testy a modely  Pro náklady porovnáme dvě období dvouvýběrovým Welchovým t-testem a vybrané skupiny raket Welchovou ANOVA s korekcí vícenásobných porovnání. Korelaci a lineární i kvadratický model použijeme k popisu časového vývoje ročních počtů nebo mediánu nákladu; vedle p-hodnot uvedeme velikost efektu a vysvětlenou variabilitu.
+89: 7. Doplňková neorbitální část  Jasně neorbitální kategorie (například suborbitální, testovací a atmosférické starty) shrneme samostatně podle roku, kategorie a případně organizace. Hlubokovesmírné mise, starty z jiných těles a near-orbitální kategorie vykážeme zvlášť. Počty nesloučíme s orbitální časovou řadou; omezené pokrytí výslovně uvedeme.
+90: Výzkumná otázka a omezení
+91: Hlavní otázka: Jak se od roku 1957 měnily počty a úspěšnost orbitálních startů, používané rakety a hmotnost vynášených nákladů podle organizací zajišťujících start?
+92: Katalog je průběžně doplňovaný kompilovaný zdroj, nikoli záznam z jednotného měřicího protokolu. Počty startů podle Agency vyjadřují evidované startovací služby. Hodnoty OrbPay mohou chybět nebo být automaticky odvozené. Poslední rok může být neúplný a neorbitální pokrytí je méně úplné.
+93: Předběžné hypotézy
+94: Roční počet orbitálních startů se v čase změnil; lineární a kvadratický model porovnáme jako popis trendu.
+95: Podíl úspěšných orbitálních startů se liší mezi organizacemi nebo historickými obdobími.
+96: Typická hmotnost nákladu OrbPay se liší mezi vybranými typy raket.
+97: Zdroj definic proměnných: GCAT, Launch List Column Explanations, https://www.planet4589.org/space/gcat/web/launch/lcols.html
