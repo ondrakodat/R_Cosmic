@@ -62,12 +62,12 @@ dev.off()
 
 # KROK 3B: Rocni pocty podle peti nejcastejsich kodu Agency
 top_ag <- c("RVSN", "UNKS", "SPX", "CALT", "AE")
-roky_top <- sort(unique(orbital$Rok))
+roky_top <- sort(unique(orbital_all$Rok))
 mat_top <- matrix(0, nrow = length(roky_top), ncol = length(top_ag),
                   dimnames = list(roky_top, top_ag))
 
 for (i in seq_along(top_ag)) {
-  roky_org <- orbital$Rok[trimws(orbital$Agency) == top_ag[i]]
+  roky_org <- orbital_all$Rok[trimws(orbital_all$Agency) == top_ag[i]]
   pocty_org <- table(roky_org)
   mat_top[names(pocty_org), i] <- as.integer(pocty_org)
 }
@@ -139,7 +139,10 @@ orbital_all$Stav <- ifelse(kod == "OS", "Plný úspěch",
                     ifelse(kod == "OE", "Výbuch na rampě",
                     ifelse(kod == "OA", "Přerušení před vzletem", "Neznámý/jiný")))))
 table(orbital_all$Stav, useNA = "ifany")
-stav_agency <- as.data.frame(table(trimws(agency_data$Agency), agency_data$Stav))
+agency_status_data <- subset(orbital_all,
+                             !trimws(Agency) %in% c("", "-") & !is.na(Agency))
+stav_agency <- as.data.frame(table(trimws(agency_status_data$Agency),
+                                   agency_status_data$Stav))
 names(stav_agency) <- c("Agency", "Stav", "Pocet")
 write.csv(stav_agency, "nova_analyza/uspesnost_podle_agency.csv", row.names = FALSE)
 
@@ -235,7 +238,7 @@ dev.off()
 # KROK 5B: OrbPay podle peti nejcastejsich typu raket
 naklad$typ_rakety <- trimws(as.character(naklad$LV_Type))
 pocty_raket_naklad <- sort(table(naklad$typ_rakety), decreasing = TRUE)
-top5_rakety <- names(head(pocty_rakety_naklad, 5))
+top5_rakety <- names(head(pocty_raket_naklad, 5))
 naklad_top5 <- subset(naklad, typ_rakety %in% top5_rakety)
 souhrn_raket <- do.call(rbind, lapply(top5_rakety, function(r) {
   hodnoty <- naklad_top5$OrbPay_num[naklad_top5$typ_rakety == r]
@@ -322,8 +325,30 @@ rocni_neorb <- aggregate(Launch_Tag ~ Rok, data = neorbital_all, FUN = length)
 names(rocni_neorb)[2] <- "Pocet_startu"
 write.csv(rocni_neorb, "nova_analyza/neorbitalni_pocty_po_roku.csv",
           row.names = FALSE)
-write.csv(as.data.frame(sort(table(neorbital_all$Kod_prvni), decreasing = TRUE)),
+rocne_kategorie_neorb <- as.data.frame(
+  table(Rok = neorbital_all$Rok, Kategorie = neorbital_all$Kod_prvni),
+  stringsAsFactors = FALSE)
+names(rocne_kategorie_neorb)[3] <- "Pocet_startu"
+write.csv(rocne_kategorie_neorb,
+          "nova_analyza/neorbitalni_pocty_po_roku_a_kategorii.csv",
+          row.names = FALSE)
+neorb_kategorie <- sort(table(neorbital_all$Kod_prvni), decreasing = TRUE)
+write.csv(data.frame(Kategorie = names(neorb_kategorie),
+                     Pocet = as.integer(neorb_kategorie)),
           "nova_analyza/neorbitalni_kategorie.csv", row.names = FALSE)
+agency_neorb <- subset(neorbital_all,
+                       !trimws(Agency) %in% c("", "-") & !is.na(Agency))
+pocty_agency_neorb <- sort(table(trimws(agency_neorb$Agency)), decreasing = TRUE)
+agency_neorb_top10 <- head(data.frame(
+  Agency = names(pocty_agency_neorb), Pocet = as.integer(pocty_agency_neorb)), 10)
+write.csv(agency_neorb_top10,
+          "nova_analyza/neorbitalni_top10_agency.csv", row.names = FALSE)
+png("nova_analyza/neorbitalni_pocty_po_roku.png", 1800, 1000, res = 150)
+plot(Pocet_startu ~ Rok, data = rocni_neorb, type = "o", pch = 16,
+     col = "darkorange", xlab = "Rok", ylab = "Počet neorbitálních záznamů",
+     main = "Jasně neorbitální záznamy podle roku",
+     sub = "Doplňkový přehled; katalog má neúplnější pokrytí")
+dev.off()
 write.csv(as.data.frame(sort(table(ostatni_kategorie$Kod_prvni), decreasing = TRUE)),
           "nova_analyza/ostatni_kategorie_mimo_orbitalni_a_neorbitalni.csv",
           row.names = FALSE)
@@ -360,6 +385,11 @@ write.csv(audit, "nova_analyza/audit_chybejicich_hodnot.csv", row.names = FALSE)
 # KROK 11: Welchovy ANOVY ciselnych parametru podle desetileti
 # Desetileti 1950 vynechame u perigea a sklonu, protoze n=2.
 # U Apogee ignorujeme Apoflag '?'; ostatni promenny pouziji platne cislo.
+cisla <- data.frame(
+  Apogee = suppressWarnings(as.numeric(as.character(naklad$Apogee))),
+  Perigee = suppressWarnings(as.numeric(as.character(naklad$Perigee))),
+  Inc = suppressWarnings(as.numeric(as.character(naklad$Inc)))
+)
 flag_ap <- trimws(as.character(naklad$Apoflag))
 flag_ap[is.na(flag_ap)] <- ''
 
@@ -375,6 +405,15 @@ for (prom in c('Apogee', 'Perigee', 'Inc')) {
   cat('\n', prom, '\n')
   print(table(d$Desetileti))
   print(oneway.test(d[[prom]] ~ d$Desetileti, var.equal = FALSE))
+  pw <- pairwise.t.test(d[[prom]], d$Desetileti,
+                        p.adjust.method = "holm", pool.sd = FALSE)
+  print(pw)
+  ptab <- as.data.frame(as.table(pw$p.value), stringsAsFactors = FALSE)
+  ptab <- ptab[!is.na(ptab$Freq), , drop = FALSE]
+  names(ptab) <- c("Desetileti_1", "Desetileti_2", "p_Holm")
+  ptab$Promenna <- prom
+  write.csv(ptab, paste0("nova_analyza/porovnani_dekady_", prom, ".csv"),
+            row.names = FALSE)
 }
 # VYSLEDKY WELCHOVY ANOVY A HOLMOVYCH POROVNANI PODLE DESETILETI
 # (R GUI, 16. 11. 2026; od 1960; Apogee bez Apoflag '?')
@@ -404,6 +443,8 @@ souhrn_momenty <- do.call(rbind, lapply(
     )
   }
 ))
+write.csv(souhrn_momenty, "nova_analyza/popisne_statistiky_orbitalnich_parametru.csv",
+          row.names = FALSE)
 # Overene: Apogee n=5918, prumer=10653.41399, var=590721100,
 # SD=24304.75403, sikmost=14.9308836, exces=566.5442219, min=51, max=1048000.
 # Perigee n=1286, prumer=290.78927, var=53132.99, SD=230.50595,

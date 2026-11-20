@@ -1,0 +1,168 @@
+{
+  "input": "C:\\Users\\revel\\Downloads\\NMAST_semestralni_prace_pocasi.docx",
+  "fonts_by_char_count": {},
+  "direct_run_formatting_runs": 541,
+  "direct_paragraph_formatting_paragraphs": 534,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 2,
+      "text": "Semestr\u00e1ln\u00ed pr\u00e1ce pro NMAST\nStatistick\u00e1 anal\u00fdza po\u010das\u00ed v \u010cern\u00e9 Ho\u0159e v roce 2023",
+      "style": "Tituln\u00ed strana"
+    },
+    {
+      "para_index": 24,
+      "text": "Tabulka 1: Pou\u017eit\u00e9 meteorologick\u00e9 stanice",
+      "style": "Caption"
+    },
+    {
+      "para_index": 28,
+      "text": "Tabulka 2: Sloupce v datech",
+      "style": "Caption"
+    },
+    {
+      "para_index": 51,
+      "text": "Tabulka 3: Popisn\u00e1 statistika pr\u016fm\u011brn\u00e9 denn\u00ed teploty (2023)",
+      "style": "Caption"
+    },
+    {
+      "para_index": 57,
+      "text": "Tabulka 4: Popisn\u00e1 statistika v\u0161ech veli\u010din, Podgorica (n = 365)",
+      "style": "Caption"
+    },
+    {
+      "para_index": 62,
+      "text": "Tabulka 5: Po\u010dty charakteristick\u00fdch dn\u00ed v roce 2023",
+      "style": "Caption"
+    },
+    {
+      "para_index": 69,
+      "text": "Obr\u00e1zek 1: Histogramy pr\u016fm\u011brn\u00e9 denn\u00ed teploty a k\u0159ivka norm\u00e1ln\u00edho rozd\u011blen\u00ed",
+      "style": "Caption"
+    },
+    {
+      "para_index": 72,
+      "text": "Obr\u00e1zek 2: Krabicov\u00fd graf pr\u016fm\u011brn\u00e9 denn\u00ed teploty podle stanic (k\u0159\u00ed\u017eek = pr\u016fm\u011br)",
+      "style": "Caption"
+    },
+    {
+      "para_index": 75,
+      "text": "Obr\u00e1zek 3: Pr\u016fm\u011brn\u00e1 denn\u00ed teplota v Podgorici podle ro\u010dn\u00edch obdob\u00ed",
+      "style": "Caption"
+    },
+    {
+      "para_index": 77,
+      "text": "Obr\u00e1zek 4: Pr\u016fb\u011bh pr\u016fm\u011brn\u00e9 denn\u00ed teploty b\u011bhem roku 2023",
+      "style": "Caption"
+    },
+    {
+      "para_index": 80,
+      "text": "Obr\u00e1zek 5: Bodov\u00fd graf denn\u00edch teplot Podgorica a Nik\u0161i\u0107",
+      "style": "Caption"
+    },
+    {
+      "para_index": 83,
+      "text": "Obr\u00e1zek 6: Denn\u00ed sr\u00e1\u017eky v Podgorici a krabicov\u00fd graf sr\u00e1\u017eek podle stanic",
+      "style": "Caption"
+    },
+    {
+      "para_index": 86,
+      "text": "Obr\u00e1zek 7: Q-Q grafy pr\u016fm\u011brn\u00e9 denn\u00ed teploty",
+      "style": "Caption"
+    },
+    {
+      "para_index": 94,
+      "text": "Tabulka 6: Shapir\u016fv-Wilk\u016fv test normality",
+      "style": "Caption"
+    },
+    {
+      "para_index": 133,
+      "text": "Tabulka 7: V\u00fdsledek jednofaktorov\u00e9 ANOVA",
+      "style": "Caption"
+    },
+    {
+      "para_index": 136,
+      "text": "Tabulka 8: Tukeyho test, porovn\u00e1n\u00ed v\u0161ech dvojic stanic",
+      "style": "Caption"
+    },
+    {
+      "para_index": 139,
+      "text": "Obr\u00e1zek 8: Tukeyho intervaly spolehlivosti pro rozd\u00edly pr\u016fm\u011br\u016f",
+      "style": "Caption"
+    },
+    {
+      "para_index": 146,
+      "text": "Tabulka 9: Pearsonovy korela\u010dn\u00ed koeficienty denn\u00ed teploty",
+      "style": "Caption"
+    },
+    {
+      "para_index": 149,
+      "text": "Obr\u00e1zek 9: Bodov\u00e9 grafy denn\u00edch teplot pro v\u0161echny dvojice stanic",
+      "style": "Caption"
+    },
+    {
+      "para_index": 154,
+      "text": "Obr\u00e1zek 10: Korela\u010dn\u00ed matice veli\u010din nam\u011b\u0159en\u00fdch v Podgorici",
+      "style": "Caption"
+    }
+  ],
+  "examples": {
+    "direct_paragraph_formatting": [
+      {
+        "para_index": 1,
+        "text": "UNIVERZITA PARDUBICE \nFakulta elektrotechniky a informatiky",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 2,
+        "text": "Semestr\u00e1ln\u00ed pr\u00e1ce pro NMAST\nStatistick\u00e1 anal\u00fdza po\u010das\u00ed v \u010cern\u00e9 Ho\u0159e v roce 2023",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 3,
+        "text": "Luk\u00e1\u0161 N\u011bme\u010dek, 1. ro\u010dn\u00edk navazuj\u00edc\u00edho studia\nObor: \u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 4,
+        "text": "",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 5,
+        "text": "",
+        "style": "Tituln\u00ed strana"
+      }
+    ],
+    "direct_run_formatting": [
+      {
+        "para_index": 1,
+        "run_text": "UNIVERZITA ",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 1,
+        "run_text": "PARDUBICE",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 1,
+        "run_text": " ",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 1,
+        "run_text": "\n",
+        "style": "Tituln\u00ed strana"
+      },
+      {
+        "para_index": 1,
+        "run_text": "Fakult",
+        "style": "Tituln\u00ed strana"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}
